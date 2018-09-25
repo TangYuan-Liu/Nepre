@@ -1,8 +1,8 @@
 # Nepre-Potential
 Scoring Function based on Neighbourhood Preference Statistics  
-[Documentation](https://liulab.csrc.ac.cn) |
-[Resources](https://liulab.csrc.ac.cn) |
-[Installation](https://liulab.csrc.ac.cn) |
+[Documentation](https://www.baidu.com) |
+[Resources](https://www.baidu.com) |
+[Installation](https://www.baidu.com) |
 
 
 Introduction
