@@ -10,7 +10,7 @@ The runing folder should contain:
 A statistic of radius of different kind of amino acid have been done by us. We us gaussian distribute function to 
 fit them and use the gaussian mean data as the default vlaue. See details in mean_radius.txt.
 
-For single protein potential energy calculate, choose a cutoff(6 angstrom e.g) and go to linux shell and type:
+For single protein potential energy calculate, go to linux shell and type:
 <pre><code>
 Nepre@liulab:~$ python Nepre.py ./example.pdb
 </code></pre>
