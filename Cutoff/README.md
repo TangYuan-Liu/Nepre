@@ -9,7 +9,7 @@ The runing folder should contain:
 
 We provide 7 cutoff options with cutoff between 4 angstrom and 10 angstrom.
 
-For single protein structure calculate, choose a cutoff(6 angstrom e.g)go to linux shell and type:
+For single protein potential energy calculate, choose a cutoff(6 angstrom e.g) and go to linux shell and type:
 <pre><code>
 Nepre@liulab:~$ python Nepre.py 6 ./example.pdb
 </code></pre>
