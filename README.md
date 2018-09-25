@@ -1,8 +1,8 @@
 # Nepre-Potential
 Scoring Function based on Neighbourhood Preference Statistics  
-[Documentation](https://xgboost.readthedocs.org) |
-[Resources](demo/README.md) |
-[Installation](https://xgboost.readthedocs.org/en/latest/build.html) |
+[Documentation](https://liulab.csrc.ac.cn) |
+[Resources](https://liulab.csrc.ac.cn) |
+[Installation](https://liulab.csrc.ac.cn) |
 
 
 Introduction
