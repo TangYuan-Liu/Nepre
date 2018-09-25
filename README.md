@@ -4,18 +4,13 @@ Scoring Function based on Neighbourhood Preference Statistics
 [Resources](demo/README.md) |
 [Installation](https://xgboost.readthedocs.org/en/latest/build.html) |
 
-Usage
-----------
-For **Nepre.py**
-<pre><code>
-Paramters: (cutoff, pdb_path)
-Nepre@liulab:~$ python Nepre.py 4 ./example.pdb
-</code></pre>
 
-You could use Nepre as a module by using:
-<pre><code>
-import Nepre
-Matrix = Nepre.load_EnergyMatrix(4)
-path = "./example.pdb"
-E = Nepre.Calculate(Matrix,path)
-</code></pre>
+Introduction
+-----------
+Nepre potential include two typical method, it can provide two major options for user:
+* Calculate the potential energy using different cutoff.
+* Calculate the potential energy using the radius of amino acid. 
+
+For the first method, users can use the cutoff between 4 angstrom to 10 angstrom to calculate the potential energy.
+For the second method, we statistic 30,000 high-resolution protein and use gaussian distribution function to fit the radius
+of every radius. Then Nepre will calculate the potential energy according to the radius of each amino acid.
