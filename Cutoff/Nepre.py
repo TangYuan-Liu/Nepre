@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import savefig
 
 
-
 def Pearson(rmsd,energy):
     size = np.shape(rmsd)[0]
     x=np.empty(shape=[2,size])
@@ -77,9 +76,6 @@ def extract_Data(line):
    
     return res
     
-    
-
-
 
 def calculate_Energy(f,matrix,cutoff):
 
