@@ -23,12 +23,13 @@ import Nepre
 cutoff = 6
 
 #select a protein
-path = "./example"
+path = "./example.pdb"
+f = open(path)
 
 #load energy matrix
 Matrix = Nepre.load_EnergyMatrix(cutoff)
 
 #calculate Nepre potential energy
-E = Nepre.Calculate(Matrix,path)
+E = Nepre.calculate_Energy(f,Matrix,cutoff)
 </code></pre>
 
