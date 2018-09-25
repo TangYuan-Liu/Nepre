@@ -33,3 +33,26 @@ Matrix = Nepre.load_EnergyMatrix(cutoff)
 E = Nepre.calculate_Energy(f,Matrix,cutoff)
 </code></pre>
 
+Extensions
+----------
+Nepre module also provide some useful function:
+* Calculate the pearson coefficient correlation.
+* Extract data from standard PDB file.
+<pre><code>
+"""
+Pearson Coefficient
+"""
+import Nepre
+x = [1,2,3,4]
+y = [1,2,3,4]
+p = Nepre.Pearson(x,y)
+
+"""
+Extract Data
+"""
+import Nepre
+f = open("./example.pdb")
+res = []
+for line in f.readlines():
+    res.append(Nepre.extract_Data(line))
+</code></pre>
