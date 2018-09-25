@@ -12,12 +12,12 @@ from matplotlib.pyplot import savefig
 
 def Pearson(rmsd,energy):
     size = np.shape(rmsd)[0]
-    x=np.empty(shape=[2,size])
+    x = np.empty(shape=[2,size])
     for i in range(size):
-        x[0][i]=rmsd[i]
+        x[0][i] = rmsd[i]
     for j in range(size):
-        x[1][j]=energy[j]
-    y=np.corrcoef(x)
+        x[1][j] = energy[j]
+    y = np.corrcoef(x)
     return y[0][1]
 
 
