@@ -10,11 +10,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import savefig
 
 
-
-
-
-
-
 def LoadRadius():
     radiusDict = {"ALA":0,"VAL":0,"LEU":0,"ILE":0,"PHE":0,\
                   "TRP":0,"MET":0,"PRO":0,"GLY":0,"SER":0,\
