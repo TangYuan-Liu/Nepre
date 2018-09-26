@@ -57,7 +57,7 @@ def load_EnergyMatrix():
     return aaDict
 
 
-def ExtractData(line):
+def extract_Data(line):
     """
     This part will extracted data from line according to the standard 
     PDB file format(Version 3.3.0, Nov.21, 2012)
@@ -114,7 +114,7 @@ def calculate_Energy(df,matrix):
     for line in df.readlines():
         if(line[0:4] != "ATOM"):
             continue
-        element_list = ExtractData(line)
+        element_list = extract_Data(line)
         record_name = element_list[0]
         atom_name = element_list[2]
         residue_name = element_list[4]
