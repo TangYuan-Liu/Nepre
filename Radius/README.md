@@ -28,7 +28,7 @@ f = open(path)
 Matrix = Nepre.load_EnergyMatrix()
 
 #calculate Nepre potential energy
-E = Nepre.calculate_Energy(f,Matrix,cutoff)
+E = Nepre.calculate_Energy(f,Matrix)
 </code></pre>
 
 Extensions
