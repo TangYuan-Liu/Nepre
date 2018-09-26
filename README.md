@@ -12,5 +12,4 @@ Nepre potential include two typical method:
 * Calculate the potential energy using the radius of amino acid. 
 
 For the first method, users can use the cutoff between 4 angstrom and 10 angstrom to calculate the potential energy.  
-For the second method, we statistic 30,000 high-resolution protein and use gaussian distribution function to fit the radius statistic
-result. Then Nepre will calculate the potential energy according to the radius of each amino acid.
+For the second method, we use 30,000 high-resolution protein to get statistical result of radius and use gaussian distribution function to fit. Then Nepre will calculate the potential energy according to the gaussian mean data of radius of each kind of amino acid.
