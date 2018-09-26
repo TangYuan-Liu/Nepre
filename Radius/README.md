@@ -5,9 +5,9 @@ Usage
 ----------
 The runing folder should contain:
 * AminoAcid.py(Class for establish amino acid)
-* cutoff.npy(Energy matrix)
+* radius.npy(Energy matrix)
 
-A statistic of radius of different kind of amino acid have been done by us. We us gaussian distribute function to 
+A statistic of radius of different kind of amino acid have been done by us. We use gaussian distribute function to 
 fit them and use the gaussian mean data as the default vlaue. See details in mean_radius.txt.
 
 For single protein potential energy calculate, go to linux shell and type:
