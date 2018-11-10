@@ -31,14 +31,14 @@ For single protein potential energy calculate, choose a cutoff(6 angstrom e.g) a
 <pre><code>
 # Not save the results in a text file
 Nepre@liulab:~$ python Nepre.py -s ./example.pdb 6
-# Save the results a text file(Same folder with Nepre.py with name "latest_results.txt")
+# Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
 Nepre@liulab:~$ python Nepre.py -s -o ./example.pdb 6
 </code></pre>
 
 <pre><code>
 # Not save the results in a text file
 Nepre@liulab:~$ python Nepre.py -m ./pdb_folder/ 6
-# Save the results a text file(Same folder with Nepre.py with name "latest_results.txt")
+# Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
 Nepre@liulab:~$ python Nepre.py -m -o ./pdb_folder/ 6
 </code></pre>
 
