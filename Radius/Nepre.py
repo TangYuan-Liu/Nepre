@@ -2,12 +2,7 @@ import os
 import math
 import numpy as np
 import AminoAcid as AA
-import gc
-import sys
-import math
-import csv
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import savefig
+import argparse
 
 
 def LoadRadius():
@@ -223,11 +218,55 @@ def calculate_Energy(df,matrix):
 
 
 if __name__ == "__main__":
-
-    args = sys.argv[1:]
-    pdb = args[0]
-    matrix = load_EnergyMatrix()
-    f = open(pdb)
-    E = calculate_Energy(f,matrix)
-    print "Nepre Potential Energy(Radius)"
-    print pdb,E     
+    parser = argparse.ArgumentParser(description="Nepre-R Scoring Function Created by CSRC")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-s","--single",help="calculate single PDB",action="store_true")
+    group.add_argument("-m","--multi",help="calculate a series of PDB",action="store_true")
+    parser.add_argument("-o","--output",help="save the results as a text file in running folder",action="store_true")
+    parser.add_argument("path",help="PDB file path of folder path")
+    args = parser.parse_args()
+    
+    if(args.single == True):
+        matrix = load_EnergyMatrix()
+        p = args.path
+        f = open(p)
+        E = calculate_Energy(f,matrix)
+        print "Nepre Potential Energy"
+        print "Using Radius"
+        print p,E
+        if(args.output):
+            save_file = open("./latest_results.txt","wb")
+            save_file.write("Nepre Potential Energy" + '\n')
+            save_file.write("Using Radius" + '\n')
+            save_file.write(p)
+            save_file.write('\t')
+            save_file.write(str(E))
+            save_file.close()
+    if(args.multi == True):
+        matrix = load_EnergyMatrix()
+        folder_path = args.path
+        file_list = []
+        for pdb_file in os.listdir(folder_path):
+            file_list.append(pdb_file)
+        E = []
+        if(folder_path[-1] != '/'):
+            folder_path += '/'
+        for pdb_file in file_list:
+            pdb_path = folder_path + pdb_file
+            f = open(pdb_path)
+            E.append(calculate_Energy(f,matrix))
+        if(args.output):
+            save_file = open("./latest_results.txt","wb")
+            save_file.write("Nepre Potential Energy" + '\n')
+            save_file.write("Using Radius" + '\n')
+            for i in range(len(E)):
+                save_file.write(file_list[i] + '\t' + str(E[i]))
+                save_file.write('\n')
+            save_file.close()
+    
+        print "Nepre Potential Energy"
+        print "Using Radius"
+        for i in range(len(E)):
+            print file_list[i],'\t',E[i]
+    
+  
