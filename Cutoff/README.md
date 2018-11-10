@@ -14,7 +14,7 @@ You can see help information by typing:
 Nepre@liulab:~$ python Nepre_F.py -h
 usage: Nepre_F.py [-h] [-s | -m] [-o] path cutoff
 
-Nepre_F Scoring Function Created by CSRC
+Nepre-F Scoring Function Created by CSRC
 
 positional arguments:
   path          PDB file path of folder path
