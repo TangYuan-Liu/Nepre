@@ -36,6 +36,7 @@ Nepre@liulab:~$ python Nepre_F.py -s ./example.pdb 6
 Nepre@liulab:~$ python Nepre_F.py -s -o ./example.pdb 6
 </code></pre>
 
+For multi-object calculation, you can type:
 <pre><code>
 #Not save the results in a text file
 Nepre@liulab:~$ python Nepre_F.py -m ./pdb_folder/ 6
