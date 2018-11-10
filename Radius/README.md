@@ -4,6 +4,7 @@ Scoring Function based on Neighbourhood Preference Statistics
 Usage
 ----------
 The runing folder should contain:
+* Nepre_R.py(Main Program)
 * AminoAcid.py(Class for establish amino acid)
 * radius.npy(Energy matrix)
 
@@ -12,8 +13,8 @@ fit them and use the gaussian mean data as the default vlaue. See details in mea
 
 You can see help information by typing:
 <pre><code>
-Nepre@liulab:~$ python Nepre.py -h
-usage: Nepre.py [-h] [-s | -m] [-o] path
+Nepre@liulab:~$ python Nepre_R.py -h
+usage: Nepre_R.py [-h] [-s | -m] [-o] path
 
 Nepre-R Scoring Function Created by CSRC
 
@@ -30,35 +31,35 @@ optional arguments:
 For single protein potential energy calculate, go to linux shell and type:
 <pre><code>
 #Not save the results in a text file
-Nepre@liulab:~$ python Nepre-R.py -s ./example.pdb
+Nepre@liulab:~$ python Nepre_R.py -s ./example.pdb
 
 #Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
-Nepre@liulab:~$ python Nepre-R.py -s -o ./example.pdb
+Nepre@liulab:~$ python Nepre_R.py -s -o ./example.pdb
 </code></pre>
 
 For multi-object job you can type:
 <pre><code>
 #Not save the results in a text file
-Nepre@liulab:~$ python Nepre-R.py -m ./pdb_folder/
+Nepre@liulab:~$ python Nepre_R.py -m ./pdb_folder/
 
 #Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
-Nepre@liulab:~$ python Nepre-R.py -m -o ./pdb_folder/
+Nepre@liulab:~$ python Nepre_R.py -m -o ./pdb_folder/
 </code></pre>
 
 You can also using Nepre as a module:
 
 <pre></code>
-import Nepre-R
+import Nepre_R
 
 #select a protein
 path = "./example.pdb"
 f = open(path)
 
 #load energy matrix
-Matrix = Nepre-R.load_EnergyMatrix()
+Matrix = Nepre_R.load_EnergyMatrix()
 
 #calculate Nepre potential energy
-E = Nepre-R.calculate_Energy(f,Matrix)
+E = Nepre_R.calculate_Energy(f,Matrix)
 </code></pre>
 
 Extensions
@@ -70,17 +71,17 @@ Nepre module also provide some useful function:
 """
 Pearson Coefficient
 """
-import Nepre-R
+import Nepre_R
 x = [1,2,3,4]
 y = [1,2,3,4]
-p = Nepre-R.Pearson(x,y)
+p = Nepre_R.Pearson(x,y)
 
 """
 Extract Data
 """
-import Nepre-R
+import Nepre_R
 f = open("./example.pdb")
 res = []
 for line in f.readlines():
-    res.append(Nepre-R.extract_Data(line))
+    res.append(Nepre_R.extract_Data(line))
 </code></pre>
