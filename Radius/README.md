@@ -38,10 +38,10 @@ Nepre@liulab:~$ python Nepre-R.py -s -o ./example.pdb
 
 For multi-object job you can type:
 <pre><code>
-# Not save the results in a text file
+#Not save the results in a text file
 Nepre@liulab:~$ python Nepre-R.py -m ./pdb_folder/
-# Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
 
+#Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
 Nepre@liulab:~$ python Nepre-R.py -m -o ./pdb_folder/
 </code></pre>
 
