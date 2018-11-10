@@ -29,10 +29,10 @@ optional arguments:
 
 For single protein potential energy calculate, go to linux shell and type:
 <pre><code>
-# Not save the results in a text file
+#Not save the results in a text file
 Nepre@liulab:~$ python Nepre-R.py -s ./example.pdb
 
-# Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
+#Save the results in a text file(Same folder with Nepre.py with name "latest_results.txt")
 Nepre@liulab:~$ python Nepre-R.py -s -o ./example.pdb
 </code></pre>
 
