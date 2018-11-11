@@ -1,4 +1,4 @@
-# Nepre-Potential
+# Nepre
 Scoring Function based on Neighbourhood Preference Statistics  
 [Documentation] |
 [Resources] |

@@ -2,15 +2,24 @@ import os
 import math
 import numpy as np
 import AminoAcid as AA
-import gc
-import sys
-import math
-import csv
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import savefig
+import argparse
 
 
-def Pearson(rmsd,energy):
+def LoadRadius():
+    radiusDict = {"ALA":0,"VAL":0,"LEU":0,"ILE":0,"PHE":0,\
+                  "TRP":0,"MET":0,"PRO":0,"GLY":0,"SER":0,\
+                  "THR":0,"CYS":0,"TYR":0,"ASN":0,"GLN":0,\
+                  "HIS":0,"LYS":0,"ARG":0,"ASP":0,"GLU":0,}
+
+    f = open("./mean_radius.txt")
+    for line in f.readlines():
+        temp = line.strip().split()
+        if(temp[0] != "Name"):
+            radiusDict[temp[1]] = float(temp[0])
+    return radiusDict
+
+
+def pearson(rmsd,energy):
     size = np.shape(rmsd)[0]
     x = np.empty(shape=[2,size])
     for i in range(size):
@@ -21,7 +30,7 @@ def Pearson(rmsd,energy):
     return y[0][1]
 
 
-def load_EnergyMatrix(cutoff):
+def load_EnergyMatrix():
     aaDict={"ALA":{},"VAL":{},"LEU":{},"ILE":{},"PHE":{},\
             "TRP":{},"MET":{},"PRO":{},"GLY":{},"SER":{},\
             "THR":{},"CYS":{},"TYR":{},"ASN":{},"GLN":{},\
@@ -29,12 +38,14 @@ def load_EnergyMatrix(cutoff):
 
     List = aaDict.keys()
     List.sort()
-    f = open("./" + str(cutoff) + ".npy")
+    
+    f1 = open("./radius.npy")
     for amino1 in List:
         for amino2 in List:
-            aaDict[amino1][amino2] = np.load(f)
-    f.close()
+            aaDict[amino1][amino2] = np.load(f1)
+    f1.close()
     return aaDict
+
 
 def extract_Data(line):
     """
@@ -76,16 +87,21 @@ def extract_Data(line):
    
     return res
     
+    
 
-def calculate_Energy(f,matrix,cutoff):
 
+
+def calculate_Energy(df,matrix):
+
+    radiusDict = LoadRadius()
     CurrentAANitrogen = None
     CurrentAACA = None
     Currentresidue_num = None
-    EachAA = []    
+    EachAA = []
     CurrentAA = None 
 
-    for line in f.readlines():        
+
+    for line in df.readlines():
         if(line[0:4] != "ATOM"):
             continue
         element_list = extract_Data(line)
@@ -132,7 +148,6 @@ def calculate_Energy(f,matrix,cutoff):
                     continue
 
                 CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-                #Amino Acid check
                 EachAA.append(CurrentAA)
                 del CurrentAA
                 CurrentAA = AA.AminoAcid(residue_name)
@@ -178,40 +193,80 @@ def calculate_Energy(f,matrix,cutoff):
         CurrentAA.CalculateCenter()
         CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
         EachAA.append(CurrentAA)
+              
     #Scan over. Each amino acid is stored as an object in EachAA. Next step is to calculate the energy, results will be saved in EnergyList. 
-    
     #Store the energy
     E = 0 
-    for m in range(len(EachAA)):
-        #Establish axis first    
+
+    for m in range(len(EachAA)):  
         EachAA[m].EstablishCoordinate()
         for n in range(len(EachAA)):
             if(m == n):
                 continue
             else:
                 dis = EachAA[m].DistanceBetweenAA(EachAA[n].center)
-                
-                if(dis < cutoff):#If the distance between two amino acid less than 10, we believe the two amino acid have interaction
+                radiusSum = radiusDict[EachAA[m].name] + radiusDict[EachAA[n].name]
+                if(dis <= radiusSum):#If the distance between two amino acid less than 10, we believe the two amino acid have interaction  
                     rho,theta,phi = EachAA[m].ChangeCoordinate(EachAA[n].center)
                     theta = min(int(math.floor(theta*20/np.pi)),19)
                     phi = min(int(math.floor(phi*10/np.pi) + 10),19)
+                    
                     E += matrix[EachAA[m].name][EachAA[n].name][theta][phi] / rho 
-                 
+                    
+                    
     return E
 
 
 if __name__ == "__main__":
- 
-    args = sys.argv[1:]
-    cutoff = int(args[0])
-    pdb = args[1]
+    parser = argparse.ArgumentParser(description="Nepre-R Scoring Function Created by CSRC")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-s","--single",help="calculate single PDB",action="store_true")
+    group.add_argument("-m","--multi",help="calculate a series of PDB",action="store_true")
+    parser.add_argument("-o","--output",help="save the results as a text file in running folder",action="store_true")
+    parser.add_argument("path",help="PDB file path of folder path")
+    args = parser.parse_args()
     
-    #load data
-    matrix = load_EnergyMatrix(cutoff)
-    f = open(pdb)
-
-    #calculate energy
-    E = calculate_Energy(f,matrix,cutoff)
-    print "Nepre Potential Energy(Cutoff):"
-    print pdb,E
+    if(args.single == True):
+        matrix = load_EnergyMatrix()
+        p = args.path
+        f = open(p)
+        E = calculate_Energy(f,matrix)
+        print "Nepre Potential Energy"
+        print "Using Radius"
+        print p,E
+        if(args.output):
+            save_file = open("./latest_results.txt","wb")
+            save_file.write("Nepre Potential Energy" + '\n')
+            save_file.write("Using Radius" + '\n')
+            save_file.write(p)
+            save_file.write('\t')
+            save_file.write(str(E))
+            save_file.close()
+    if(args.multi == True):
+        matrix = load_EnergyMatrix()
+        folder_path = args.path
+        file_list = []
+        for pdb_file in os.listdir(folder_path):
+            file_list.append(pdb_file)
+        E = []
+        if(folder_path[-1] != '/'):
+            folder_path += '/'
+        for pdb_file in file_list:
+            pdb_path = folder_path + pdb_file
+            f = open(pdb_path)
+            E.append(calculate_Energy(f,matrix))
+        if(args.output):
+            save_file = open("./latest_results.txt","wb")
+            save_file.write("Nepre Potential Energy" + '\n')
+            save_file.write("Using Radius" + '\n')
+            for i in range(len(E)):
+                save_file.write(file_list[i] + '\t' + str(E[i]))
+                save_file.write('\n')
+            save_file.close()
     
+        print "Nepre Potential Energy"
+        print "Using Radius"
+        for i in range(len(E)):
+            print file_list[i],'\t',E[i]
+    
+  
