@@ -1,14 +1,14 @@
-# Nepre-Potential(Cutoff)
+# Nepre-F
 Scoring Function based on Neighbourhood Preference Statistics  
 
 Usage
 ----------
 The runing folder should contain:
-* Nepre_F.py(Main Program)
-* AminoAcid.py(Class for establish amino acid)
-* cutoff.npy(Energy matrix)
+* Nepre_F.py (Main program)
+* AminoAcid.py (Class for establish amino acid)
+* cutoff.npy (Energy matrix)
 
-We provide 7 cutoff options with cutoff between 4 angstrom and 10 angstrom.
+We provide **7** cutoff options with cutoff between **4** angstrom and **10** angstrom.
 You can see help information by typing:
 <pre><code>
 Nepre@liulab:~$ python Nepre_F.py -h
@@ -27,7 +27,7 @@ optional arguments:
   -o, --output  save the results as a text file in running folder
 </code></pre>
 
-For single protein potential energy calculate, choose a cutoff(6 angstrom e.g) and go to linux shell and type:
+For **single** protein potential energy calculate, choose a cutoff (6 angstrom e.g) and type:
 <pre><code>
 #Not save the results in a text file
 Nepre@liulab:~$ python Nepre_F.py -s ./example.pdb 6
@@ -36,7 +36,7 @@ Nepre@liulab:~$ python Nepre_F.py -s ./example.pdb 6
 Nepre@liulab:~$ python Nepre_F.py -s -o ./example.pdb 6
 </code></pre>
 
-For multi-object calculation, you can type:
+For **multi-object** calculation, you can type:
 <pre><code>
 #Not save the results in a text file
 Nepre@liulab:~$ python Nepre_F.py -m ./pdb_folder/ 6
@@ -45,7 +45,7 @@ Nepre@liulab:~$ python Nepre_F.py -m ./pdb_folder/ 6
 Nepre@liulab:~$ python Nepre_F.py -m -o ./pdb_folder/ 6
 </code></pre>
 
-You can also use Nepre-F.py as a module if you want to use the calculation results for other purposes:
+You can also use **Nepre_F.py** as a module if you want to use the calculation results for other purposes:
 <pre><code>
 import Nepre_F
 
