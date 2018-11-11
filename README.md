@@ -1,8 +1,8 @@
 # Nepre-Potential
 Scoring Function based on Neighbourhood Preference Statistics  
-[Documentation]() |
-[Resources]() |
-[Installation]() |
+[Documentation] |
+[Resources] |
+[Installation] |
 
 
 Introduction
