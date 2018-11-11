@@ -1,15 +1,15 @@
-# Nepre-Potential(Radius)
+# Nepre-R
 Scoring Function based on Neighbourhood Preference Statistics  
 
 Usage
 ----------
 The runing folder should contain:
-* Nepre_R.py(Main Program)
-* AminoAcid.py(Class for establish amino acid)
-* radius.npy(Energy matrix)
+* Nepre_R.py (Main program)
+* AminoAcid.py (Class for establish amino acid)
+* radius.npy (Energy matrix)
 
 A statistic of radius of different kind of amino acid have been done by us. We use gaussian distribute function to 
-fit them and use the gaussian mean data as the default vlaue. See details in mean_radius.txt.
+fit them and use the **gaussian mean** data as the default value. See details in mean_radius.txt.
 
 You can see help information by typing:
 <pre><code>
@@ -28,7 +28,7 @@ optional arguments:
   -o, --output  save the results as a text file in running folder
 </code></pre>
 
-For single protein potential energy calculate, go to linux shell and type:
+For **single** protein potential energy calculate, go to linux shell and type:
 <pre><code>
 #Not save the results in a text file
 Nepre@liulab:~$ python Nepre_R.py -s ./example.pdb
@@ -37,7 +37,7 @@ Nepre@liulab:~$ python Nepre_R.py -s ./example.pdb
 Nepre@liulab:~$ python Nepre_R.py -s -o ./example.pdb
 </code></pre>
 
-For multi-object job you can type:
+For **multi-object** job you can type:
 <pre><code>
 #Not save the results in a text file
 Nepre@liulab:~$ python Nepre_R.py -m ./pdb_folder/
@@ -46,7 +46,7 @@ Nepre@liulab:~$ python Nepre_R.py -m ./pdb_folder/
 Nepre@liulab:~$ python Nepre_R.py -m -o ./pdb_folder/
 </code></pre>
 
-You can also using Nepre as a module:
+You can also using **Nepre_R.py** as a module:
 
 <pre></code>
 import Nepre_R
