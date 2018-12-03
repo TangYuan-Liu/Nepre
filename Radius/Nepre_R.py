@@ -92,18 +92,23 @@ def extract_Data(line):
 
 
 def calculate_Energy(df,matrix):
-
+    
+    # define some useful paramter
     radiusDict = LoadRadius()
     CurrentAANitrogen = None
     CurrentAACA = None
     Currentresidue_num = None
-    EachAA = []
-    CurrentAA = None 
-
-
+    CurrentAA = None
+    # list of amino acids which have side chain
+    UseAA_list = []
+    # list of amino acids which have no side chain
+    IgnoreAA_list = []
+     
+    # scan pdb file line one by one
     for line in df.readlines():
         if(line[0:4] != "ATOM"):
             continue
+        # obtain information
         element_list = extract_Data(line)
         record_name = element_list[0]
         atom_name = element_list[2]
@@ -114,11 +119,13 @@ def calculate_Energy(df,matrix):
         ycor = float(element_list[-2])
         zcor = float(element_list[-1])
         
+        # ignore hydrogen
         if(atom_name == "H"):
             continue
+        # ignore amino acid out of the list
         if(residue_name not in matrix):
             continue
-
+        # scan useful amino acid
         if(CurrentAA == None):
             CurrentAA = AA.AminoAcid(residue_name)
             Currentresidue_num = residue_num
@@ -142,14 +149,17 @@ def calculate_Energy(df,matrix):
             #If another amino acid begins
             if(residue_num != Currentresidue_num):
                 state = CurrentAA.CalculateCenter()
+                # current amino acid has no side chain, start a new one
                 if(state == False):
+                    # put the amino acid into ignore list
+                    IgnoreAA_list.append(CurrentAA)
                     CurrentAA = AA.AminoAcid(residue_name)
                     Currentresidue_num = residue_num
                     continue
 
                 CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-                EachAA.append(CurrentAA)
-                del CurrentAA
+                # put previous amino acid into list and start a new
+                UseAA_list.append(CurrentAA)
                 CurrentAA = AA.AminoAcid(residue_name)
 
                 Currentresidue_num = residue_num
@@ -190,28 +200,26 @@ def calculate_Energy(df,matrix):
     
     state = CurrentAA.CalculateCenter()
     if(state != False):        
-        CurrentAA.CalculateCenter()
         CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-        EachAA.append(CurrentAA)
+        UseAA_list.append(CurrentAA)
               
-    #Scan over. Each amino acid is stored as an object in EachAA. Next step is to calculate the energy, results will be saved in EnergyList. 
+    #Scan over. Each amino acid is stored as an object in UseAA_list. Next step is to calculate the energy, results will be saved in EnergyList. 
     #Store the energy
     E = 0 
 
-    for m in range(len(EachAA)):  
-        EachAA[m].EstablishCoordinate()
-        for n in range(len(EachAA)):
+    for m in range(len(UseAA_list)):  
+        UseAA_list[m].EstablishCoordinate()
+        for n in range(len(UseAA_list)):
             if(m == n):
                 continue
             else:
-                dis = EachAA[m].DistanceBetweenAA(EachAA[n].center)
-                radiusSum = radiusDict[EachAA[m].name] + radiusDict[EachAA[n].name]
+                dis = UseAA_list[m].DistanceBetweenAA(UseAA_list[n].center)
+                radiusSum = radiusDict[UseAA_list[m].name] + radiusDict[UseAA_list[n].name]
                 if(dis <= radiusSum):#If the distance between two amino acid less than 10, we believe the two amino acid have interaction  
-                    rho,theta,phi = EachAA[m].ChangeCoordinate(EachAA[n].center)
+                    rho,theta,phi = UseAA_list[m].ChangeCoordinate(UseAA_list[n].center)
                     theta = min(int(math.floor(theta*20/np.pi)),19)
                     phi = min(int(math.floor(phi*10/np.pi) + 10),19)
-                    
-                    E += matrix[EachAA[m].name][EachAA[n].name][theta][phi] / rho 
+                    E += matrix[UseAA_list[m].name][UseAA_list[n].name][theta][phi] / rho 
                     
                     
     return E
