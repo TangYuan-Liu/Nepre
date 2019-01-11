@@ -105,7 +105,7 @@ def calculate_Energy(df,matrix):
     IgnoreAA_list = []
      
     # scan pdb file line one by one
-    for line in df.readlines():
+    for line in df.readlines():        
         if(line[0:4] != "ATOM"):
             continue
         # obtain information
@@ -125,86 +125,86 @@ def calculate_Energy(df,matrix):
         # ignore amino acid out of the list
         if(residue_name not in matrix):
             continue
-        # scan useful amino acid
-        if(CurrentAA == None):
+        # from here start to scan useful amino acid
+        # first amino acid
+        if(CurrentAA is None):
             CurrentAA = AA.AminoAcid(residue_name)
             Currentresidue_num = residue_num
             if(atom_name == "N" or atom_name == "CA"):
-                if(alternate_indicator == "B"):
-                    continue
-                if(atom_name == "N"):
-                    CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                else:
-                    CurrentAACA = np.array([xcor,ycor,zcor])
-            if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                    if(alternate_indicator == "A" and line[15] == "1"):
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                if(alternate_indicator == " " or alternate_indicator == "A"):
+                    if(atom_name == "N"):
+                        CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                     else:
-                        continue
+                        CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                 else:
-                    CurrentAA.SumCenters(xcor,ycor,zcor)
+                    continue
+                
+            if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                if(alternate_indicator == " " or alternate_indicator == "A"):
+                    CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                else:
+                    continue
+        
+        # current amino acid is not the first
         else:
             #If another amino acid begins
             if(residue_num != Currentresidue_num):
-                state = CurrentAA.CalculateCenter()
-                # current amino acid has no side chain, start a new one
-                if(state == False):
-                    # put the amino acid into ignore list
-                    IgnoreAA_list.append(CurrentAA)
-                    CurrentAA = AA.AminoAcid(residue_name)
-                    Currentresidue_num = residue_num
-                    continue
-
-                CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-                # put previous amino acid into list and start a new
-                UseAA_list.append(CurrentAA)
+                state = CurrentAA.Check()
+                # previous amino acid has no problem
+                if(state == True):
+                    CurrentAA.CalculateCenter()
+                    UseAA_list.append(CurrentAA)
+                # previous amino acid has problem
+                else:
+                    info = [state,Currentresidue_num]
+                    IgnoreAA_list.append(info)
+                
                 CurrentAA = AA.AminoAcid(residue_name)
-
                 Currentresidue_num = residue_num
                 if(atom_name == "N" or atom_name == "CA"):
-                    if(alternate_indicator == "B"):
-                        continue
-                    if(atom_name == "N"):
-                        CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                    else:
-                        CurrentAACA = np.array([xcor,ycor,zcor])
-                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                    if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                        if(alternate_indicator == "A" and line[15] == "1"):
-                            CurrentAA.SumCenters(xcor,ycor,zcor)
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        if(atom_name == "N"):
+                            CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                         else:
-                            continue
+                            CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                     else:
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                        continue
+                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                    else:
+                        continue
             #If still the same amino acid
             else:
                 if(atom_name == "N" or atom_name == "CA"):
-                    if(alternate_indicator == "B"):
-                        continue
-                    if(atom_name == "N"):
-                        CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                    else:
-                        CurrentAACA = np.array([xcor,ycor,zcor])
-                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                    if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                        if(alternate_indicator == "A" and line[15] == "1"):
-                            CurrentAA.SumCenters(xcor,ycor,zcor)
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        if(atom_name == "N"):
+                            CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                         else:
-                            continue
+                            CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                     else:
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                        continue
+                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                    else:
+                        continue
     
-    state = CurrentAA.CalculateCenter()
-    if(state != False):        
-        CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
+    state = CurrentAA.Check()
+    if(state == True):
+        CurrentAA.CalculateCenter()
         UseAA_list.append(CurrentAA)
-              
-    #Scan over. Each amino acid is stored as an object in UseAA_list. Next step is to calculate the energy, results will be saved in EnergyList. 
-    #Store the energy
+        CurrentAA = AA.AminoAcid(residue_name)
+        Currentresidue_num = residue_num
+    
+    else:
+        info = [state,Currentresidue_num]
+        IgnoreAA_list.append(info)
+        CurrentAA = AA.AminoAcid(residue_name)
+        Currentresidue_num = residue_num
+    
+    # Scan over. Each amino acid is stored as an object in UseAA_list.  
+    # Next step is to calculate the energy, results will be saved in EnergyList.
     E = 0 
 
     for m in range(len(UseAA_list)):  
@@ -222,7 +222,8 @@ def calculate_Energy(df,matrix):
                     E += matrix[UseAA_list[m].name][UseAA_list[n].name][theta][phi] / rho 
                     
                     
-    return E
+    #return E
+    return E,UseAA_list,IgnoreAA_list
 
 
 if __name__ == "__main__":
