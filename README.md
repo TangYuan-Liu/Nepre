@@ -1,8 +1,6 @@
 # Nepre
 Scoring Function based on Neighbourhood Preference Statistics  
-[Documentation] |
-[Resources] |
-[Installation] |
+[LiuLab]() | [Document]() | [WebServer Link]() | [Nepre Potential]() | [Software Link]()
 
 
 Introduction
@@ -15,6 +13,9 @@ Nepre is designed to be **efficient**, **flexible** and **protable** with **two*
 For **Nepre-F**, users can use the cutoff between 4 angstrom and 10 angstrom to calculate the potential energy.  
 For **Nepre-R**, 30,000 high-resolution protein are used to get statistical result of radius and fitted by the gaussian distribution function. Then Nepre will calculate the potential energy according to the gaussian mean data of radius of each kind of amino acid.
 
-Copyright
------------
-Nepre is created by liulab of Beijing Computational Science Research Center.
+## CopyRight
+Nepre-WebServer is created by **LiuLab** of **Beijing Computation Science Research Center(CSRC)**.
+
+## Contact Us
+**Email**: nepre2018@163.com  
+**Address**: Building 9, East Zone, ZPark II, No.10 East Xibeiwang Road, Haidian District, Beijing 100193, China.
