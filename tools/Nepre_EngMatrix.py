@@ -53,10 +53,7 @@ if __name__ == "__main__":
             ccDict[List[i]][List[j]]=float(line[j])
         i += 1
     fr.close()
-
-    
     emptyarea = {}
-   
     print("Start to read coordinate.txt")
     fr=open("../../coordinate.txt")
     amino1=''
@@ -64,7 +61,6 @@ if __name__ == "__main__":
     
     for line in fr.readlines():
         line = line.strip()
-
         if line=='':
             continue
         if len(line)==3:
@@ -80,7 +76,6 @@ if __name__ == "__main__":
                 cdDict[amino1][amino2]=[[float(line[0]),float(line[1]),float(line[2])]]
             else:
                 cdDict[amino1][amino2].append([float(line[0]),float(line[1]),float(line[2])])
-            
     fr.close()
 
     for amino1 in cdDict:
