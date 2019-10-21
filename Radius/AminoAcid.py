@@ -3,29 +3,31 @@ import numpy as np
 class AminoAcid:
     def __init__(self,name):
         self.center = np.zeros([3,])
-        self.AminoAcidAmount = 0
+        self.SideChainAtomAmount = 0
         self.name = name
         self.xAxis = None
         self.yAxis = None
         self.zAxis = None
         self.CA = None
         self.N = None
+        self.SideChain = []
+        self.xlist = []
+        self.ylist = []
+        self.zlist = []
     #Sum all atom coordinate
-    def SumCenters(self,x,y,z):
+    def SumCenters(self,x,y,z,atom):
         self.center[0] += x
         self.center[1] += y
         self.center[2] += z
-        self.AminoAcidAmount += 1
+        self.xlist.append(x)
+        self.ylist.append(y)
+        self.zlist.append(z)
+        self.SideChainAtomAmount += 1
+        self.SideChain.append(atom)
 
     #Calculate the center of the amino acid
     def CalculateCenter(self):
-        if(self.AminoAcidAmount == 0):
-            #print("No side chain")
-            #print self.name
-            return False
-        else:
-            self.center = self.center / self.AminoAcidAmount
-            return True
+        self.center = self.center / self.SideChainAtomAmount
     
     #Calculate distance between two amino acid
     def DistanceBetweenAA(self,center):
@@ -33,9 +35,11 @@ class AminoAcid:
         return dis
 
     #Input the CA and N
-    def InputCAN(self,N,CA):
-        self.N = N
+    def InputCA(self,CA):
         self.CA = CA
+    
+    def InputN(self,N):
+        self.N = N
 
     #Establish the 3-dimension coordinate
     def EstablishCoordinate(self):
@@ -53,3 +57,12 @@ class AminoAcid:
         theta = np.arccos(z/rho)
         phi = np.arctan2(y,x)
         return rho,theta,phi
+
+    def Check(self):
+        if(self.SideChainAtomAmount == 0):
+            return "No Side Chain"
+        if(self.N is None):
+            return "No Nitrigen"
+        if(self.CA is None):
+            return "No Alpha Carbon"
+        return True

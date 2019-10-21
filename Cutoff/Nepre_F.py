@@ -72,16 +72,21 @@ def extract_Data(line):
     
 
 def calculate_Energy(f,matrix,cutoff):
-
+    # define some useful paramter
     CurrentAANitrogen = None
     CurrentAACA = None
     Currentresidue_num = None
-    EachAA = []    
-    CurrentAA = None 
-
+    CurrentAA = None
+    # list of amino acids which have side chain
+    UseAA_list = []
+    # list of amino acids which are not used
+    IgnoreAA_list = []    
+     
+    # scan pdb file line one by one
     for line in f.readlines():        
         if(line[0:4] != "ATOM"):
             continue
+        # obtain information
         element_list = extract_Data(line)
         record_name = element_list[0]
         atom_name = element_list[2]
@@ -92,105 +97,112 @@ def calculate_Energy(f,matrix,cutoff):
         ycor = float(element_list[-2])
         zcor = float(element_list[-1])
         
+        # ignore hydrogen
         if(atom_name == "H"):
             continue
+        # ignore amino acid out of the list
         if(residue_name not in matrix):
             continue
-
-        if(CurrentAA == None):
+        # from here start to scan useful amino acid
+        # first amino acid
+        if(CurrentAA is None):
             CurrentAA = AA.AminoAcid(residue_name)
             Currentresidue_num = residue_num
             if(atom_name == "N" or atom_name == "CA"):
-                if(alternate_indicator == "B"):
-                    continue
-                if(atom_name == "N"):
-                    CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                else:
-                    CurrentAACA = np.array([xcor,ycor,zcor])
-            if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                    if(alternate_indicator == "A" and line[15] == "1"):
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                if(alternate_indicator == " " or alternate_indicator == "A"):
+                    if(atom_name == "N"):
+                        CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                     else:
-                        continue
+                        CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                 else:
-                    CurrentAA.SumCenters(xcor,ycor,zcor)
+                    continue
+                
+            if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                if(alternate_indicator == " " or alternate_indicator == "A"):
+                    CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                else:
+                    continue
+        
+        # current amino acid is not the first
         else:
             #If another amino acid begins
             if(residue_num != Currentresidue_num):
-                state = CurrentAA.CalculateCenter()
-                if(state == False):
-                    CurrentAA = AA.AminoAcid(residue_name)
-                    Currentresidue_num = residue_num
-                    continue
-
-                CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-                #Amino Acid check
-                EachAA.append(CurrentAA)
-                del CurrentAA
+                state = CurrentAA.Check()
+                # previous amino acid has no problem
+                if(state == True):
+                    CurrentAA.CalculateCenter()
+                    UseAA_list.append(CurrentAA)
+                # previous amino acid has problem
+                else:
+                    info = [state,Currentresidue_num]
+                    IgnoreAA_list.append(info)
+                
                 CurrentAA = AA.AminoAcid(residue_name)
-
                 Currentresidue_num = residue_num
                 if(atom_name == "N" or atom_name == "CA"):
-                    if(alternate_indicator == "B"):
-                        continue
-                    if(atom_name == "N"):
-                        CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                    else:
-                        CurrentAACA = np.array([xcor,ycor,zcor])
-                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                    if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                        if(alternate_indicator == "A" and line[15] == "1"):
-                            CurrentAA.SumCenters(xcor,ycor,zcor)
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        if(atom_name == "N"):
+                            CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                         else:
-                            continue
+                            CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                     else:
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                        continue
+                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                    else:
+                        continue
             #If still the same amino acid
             else:
                 if(atom_name == "N" or atom_name == "CA"):
-                    if(alternate_indicator == "B"):
-                        continue
-                    if(atom_name == "N"):
-                        CurrentAANitrogen = np.array([xcor,ycor,zcor])
-                    else:
-                        CurrentAACA = np.array([xcor,ycor,zcor])
-                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
-                    if(alternate_indicator != " "):
-                    #If cases like "AASN or BASN" appears, we only add A 
-                        if(alternate_indicator == "A" and line[15] == "1"):
-                            CurrentAA.SumCenters(xcor,ycor,zcor)
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        if(atom_name == "N"):
+                            CurrentAA.InputN(np.array([xcor,ycor,zcor]))
                         else:
-                            continue
+                            CurrentAA.InputCA(np.array([xcor,ycor,zcor]))
                     else:
-                        CurrentAA.SumCenters(xcor,ycor,zcor)
+                        continue
+                if(residue_name == "GLY" or atom_name not in {"N","CA","C","O","O1","02"}):
+                    if(alternate_indicator == " " or alternate_indicator == "A"):
+                        CurrentAA.SumCenters(xcor,ycor,zcor,atom_name)
+                    else:
+                        continue
     
-    state = CurrentAA.CalculateCenter()
-    if(state != False):        
+    state = CurrentAA.Check()
+    if(state == True):
         CurrentAA.CalculateCenter()
-        CurrentAA.InputCAN(CurrentAANitrogen,CurrentAACA)
-        EachAA.append(CurrentAA)
-    #Scan over. Each amino acid is stored as an object in EachAA. Next step is to calculate the energy, results will be saved in EnergyList. 
+        UseAA_list.append(CurrentAA)
+        CurrentAA = AA.AminoAcid(residue_name)
+        Currentresidue_num = residue_num
     
-    #Store the energy
+    else:
+        info = [state,Currentresidue_num]
+        IgnoreAA_list.append(info)
+        CurrentAA = AA.AminoAcid(residue_name)
+        Currentresidue_num = residue_num
+    
+    # Scan over. Each amino acid is stored as an object in UseAA_list.  
+    # Next step is to calculate the energy, results will be saved in EnergyList.
     E = 0 
-    for m in range(len(EachAA)):
+    for m in range(len(UseAA_list)):
         #Establish axis first    
-        EachAA[m].EstablishCoordinate()
-        for n in range(len(EachAA)):
+        UseAA_list[m].EstablishCoordinate()
+        for n in range(len(UseAA_list)):
             if(m == n):
                 continue
             else:
-                dis = EachAA[m].DistanceBetweenAA(EachAA[n].center)
+                dis = UseAA_list[m].DistanceBetweenAA(UseAA_list[n].center)
                 
-                if(dis < cutoff):#If the distance between two amino acid less than 10, we believe the two amino acid have interaction
-                    rho,theta,phi = EachAA[m].ChangeCoordinate(EachAA[n].center)
+                # If the distance between two amino acid less than cutoff, 
+                # we believe the two amino acid have interaction.
+                if(dis < cutoff):
+                    rho,theta,phi = UseAA_list[m].ChangeCoordinate(UseAA_list[n].center)
+                    print rho,theta,phi
                     theta = min(int(math.floor(theta*20/np.pi)),19)
                     phi = min(int(math.floor(phi*10/np.pi) + 10),19)
-                    E += matrix[EachAA[m].name][EachAA[n].name][theta][phi] / rho 
+                    E += matrix[UseAA_list[m].name][UseAA_list[n].name][theta][phi] / rho 
                  
+    #return E,UseAA_list,IgnoreAA_list
     return E
 
 
