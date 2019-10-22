@@ -7,7 +7,6 @@
 
 [LiuLab](http://liulab.csrc.ac.cn) | [Article](https://www.biorxiv.org/content/10.1101/463554v1) | [WebServer](http://liulab.csrc.ac.cn:10004/index/) | [Code Package](https://github.com/LiuLab-CSRC/Nepre) 
 
-
 Introduction
 ---------------
 Nepre is a scoring function for calculating the protein's potential energy. And it will help to predict the 3D structure of a protein.
