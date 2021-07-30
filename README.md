@@ -5,7 +5,7 @@
 ![](https://img.shields.io/badge/language-Python-seagreen.svg?style=flat-square)
 ![](https://img.shields.io/badge/platform-Linux|Windows-blue.svg?style=flat-square&logo=Linux)
 
-[LiuLab]() | [Article]() | [WebServer]() | [Code Package]() | [Executable Program]()
+[LiuLab]() | [Article](https://www.nature.com/articles/s41598-020-61205-w) | [WebServer]() | [Code Package]() | [Executable Program]()
 
 
 Introduction
