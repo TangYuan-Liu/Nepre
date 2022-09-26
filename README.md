@@ -31,6 +31,10 @@ modules are required for using Nepre.
 * numpy
 * tqmd
 
+Performance
+-----------
+![image](https://user-images.githubusercontent.com/29272811/192245802-06eb30f3-9527-45be-b568-8e34dee621df.png)
+
 Contact Us
 -------------
 **Email**: nepre2018@163.com  
